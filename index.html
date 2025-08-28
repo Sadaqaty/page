@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>System Breached By QuickSilver</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Aldrich&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300&display=swap');
+
+    :root {
+      --bg-color: #050a13;
+      --flag-opacity: 0.18;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: #e0e0e0;
+      font-family: 'Roboto Mono', monospace;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      animation: subtleBodyShift 18s infinite ease-in-out;
+    }
+
+    #flag-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('https://upload.wikimedia.org/wikipedia/commons/3/32/Flag_of_Pakistan.svg');
+      background-size: cover;
+      background-position: center;
+      opacity: var(--flag-opacity);
+      z-index: -10;
+      animation: flagPulsate 18s infinite alternate, flagGlitch 25s infinite steps(1);
+    }
+
+    @keyframes flagPulsate {
+      0% {
+        opacity: 0.10;
+        filter: saturate(0.5) blur(0.5px) brightness(0.8);
+      }
+
+      50% {
+        opacity: 0.25;
+        filter: saturate(1.1) blur(0px) brightness(1.2);
+      }
+
+      100% {
+        opacity: 0.10;
+        filter: saturate(0.5) blur(0.5px) brightness(0.8);
+      }
+    }
+
+    @keyframes flagGlitch {
+
+      0%,
+      100% {
+        clip-path: inset(0 0 0 0);
+      }
+
+      3% {
+        clip-path: polygon(0 0, 100% 0, 100% 25%, 0 30%, 0 55%, 100% 50%, 100% 100%, 0 100%);
+      }
+
+      3.1% {
+        clip-path: inset(0 0 0 0);
+      }
+
+      7% {
+        transform: translateX(1px) translateY(-0.5px);
+      }
+
+      7.1% {
+        transform: none;
+      }
+    }
+
+    .overlay-grid,
+    .overlay-scanlines {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -8;
+    }
+
+    .overlay-grid {
+      background-image: linear-gradient(rgba(0, 255, 128, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 128, 0.03) 1px, transparent 1px);
+      background-size: 35px 35px;
+      animation: gridMove 25s linear infinite;
+    }
+
+    @keyframes gridMove {
+      to {
+        background-position: 70px 70px;
+      }
+    }
+
+    .overlay-scanlines {
+      background: linear-gradient(to bottom, rgba(25, 30, 60, 0) 0%, rgba(25, 255, 60, 0.04) 50%, rgba(25, 30, 60, 0) 100%);
+      background-size: 100% 4px;
+      animation: scanlineMove 0.25s linear infinite;
+    }
+
+    @keyframes scanlineMove {
+      to {
+        background-position: 0 4px;
+      }
+    }
+
+    @keyframes subtleBodyShift {
+
+      0%,
+      100% {
+        transform: translate(0, 0) skew(0deg, 0deg);
+      }
+
+      25% {
+        transform: translate(0.5px, -0.5px) skew(0.005deg, -0.005deg);
+      }
+
+      50% {
+        transform: translate(-0.5px, 0.5px) skew(-0.005deg, 0.005deg);
+      }
+
+      75% {
+        transform: translate(-0.5px, -0.5px) skew(0.005deg, 0.005deg);
+      }
+    }
+
+    .breach-container {
+      position: relative;
+      text-align: center;
+      padding: 20px;
+      z-index: 1;
+      max-width: 95%;
+    }
+
+    .hacker-image {
+      width: 180px;
+      height: 180px;
+      border-radius: 12px;
+      box-shadow: 0 0 40px #00ff99a0, 0 0 8px #fff;
+      margin: 0 auto 30px auto;
+      display: block;
+      object-fit: cover;
+      border: 2px solid #00ff99;
+      animation: hackerImgPulse 3s infinite alternate;
+    }
+
+    @keyframes hackerImgPulse {
+      0% {
+        box-shadow: 0 0 20px #00ff99a0, 0 0 8px #fff;
+      }
+
+      100% {
+        box-shadow: 0 0 60px #00ff99e0, 0 0 16px #fff;
+      }
+    }
+
+    .main-title {
+      font-family: 'Aldrich', sans-serif;
+      font-size: clamp(2.2rem, 10vw, 6rem);
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.10em;
+      position: relative;
+      margin-bottom: 35px;
+      display: block;
+    }
+
+    .main-title .char {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(40px) scale(0.6);
+      animation: charAppear 0.45s forwards, charRgbShift 4.5s infinite alternate;
+    }
+
+    .main-title .char:nth-child(1) {
+      animation-delay: 0.50s, 0.60s;
+    }
+
+    .main-title .char:nth-child(2) {
+      animation-delay: 0.58s, 0.68s;
+    }
+
+    .main-title .char:nth-child(3) {
+      animation-delay: 0.66s, 0.76s;
+    }
+
+    .main-title .char:nth-child(4) {
+      animation-delay: 0.74s, 0.84s;
+    }
+
+    .main-title .char:nth-child(5) {
+      animation-delay: 0.82s, 0.92s;
+    }
+
+    .main-title .char:nth-child(6) {
+      animation-delay: 0.90s, 1.00s;
+    }
+
+    .main-title .char:nth-child(7) {
+      animation-delay: 0.98s, 1.08s;
+    }
+
+    .main-title .char:nth-child(8) {
+      animation-delay: 1.06s, 1.16s;
+    }
+
+    .main-title .char:nth-child(9) {
+      animation-delay: 1.14s, 1.24s;
+    }
+
+    .main-title .char:nth-child(10) {
+      animation-delay: 1.22s, 1.32s;
+    }
+
+    .main-title .char:nth-child(11) {
+      animation-delay: 1.30s, 1.40s;
+    }
+
+    .main-title .char:nth-child(12) {
+      animation-delay: 1.38s, 1.48s;
+    }
+
+    @keyframes charAppear {
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes charRgbShift {
+
+      0%,
+      100% {
+        text-shadow: 0 0 8px #00ff99, 0 0 18px #00ff99, 0 0 30px #00ff9990;
+        color: #00ff99;
+      }
+
+      33% {
+        text-shadow: 0 0 8px #fff, 0 0 18px #fff, 0 0 30px #fff;
+        color: #fff;
+      }
+
+      66% {
+        text-shadow: 0 0 8px #0099ff, 0 0 18px #0099ff, 0 0 30px #0099ff90;
+        color: #00ccff;
+      }
+    }
+
+    .main-title .sub-title-part {
+      font-size: 0.5em;
+      font-weight: normal;
+      color: #dde;
+      opacity: 0;
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 0.5em;
+      animation: fadeInTextSimple 1s 2.2s forwards, subTitleGlow 3.5s 2.2s infinite alternate;
+    }
+
+    @keyframes fadeInTextSimple {
+      to {
+        opacity: 0.9;
+      }
+    }
+
+    @keyframes subTitleGlow {
+
+      0%,
+      100% {
+        text-shadow: 0 0 7px #00ff99, 0 0 14px #fff;
+      }
+
+      50% {
+        text-shadow: 0 0 9px #0099ff, 0 0 18px #fff;
+      }
+    }
+
+    .sub-message {
+      font-size: clamp(0.95rem, 2.3vw, 1.25rem);
+      line-height: 1.8;
+      max-width: 700px;
+      margin: 0 auto 35px auto;
+      color: #b0ffd0;
+      opacity: 0;
+      animation: fadeInTextExtended 2s 2.5s forwards;
+    }
+
+    @keyframes fadeInTextExtended {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0px);
+      }
+    }
+
+    .sub-message span.highlight {
+      color: transparent;
+      animation: rgbTextReveal 3.5s infinite alternate, rgbTextGlow 3.5s infinite alternate;
+      padding: 0 2px;
+      font-weight: bold;
+    }
+
+    @keyframes rgbTextReveal {
+      0% {
+        background: linear-gradient(90deg, #00ff99, #fff, #0099ff, #00ff99);
+        -webkit-background-clip: text;
+        background-clip: text;
+        background-size: 300% 100%;
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    @keyframes rgbTextGlow {
+      0% {
+        text-shadow: 0 0 4px #00ff99a0, 0 0 7px #fff;
+      }
+
+      50% {
+        text-shadow: 0 0 4px #0099ffa0, 0 0 7px #fff;
+      }
+
+      100% {
+        text-shadow: 0 0 4px #fff, 0 0 7px #00ff99a0;
+      }
+    }
+
+    .signature-zone {
+      font-family: 'Aldrich', sans-serif;
+      font-size: clamp(0.85rem, 2vw, 1.05rem);
+      color: #77ffbb;
+      letter-spacing: 1.5px;
+      margin-top: 45px;
+      opacity: 0;
+      animation: fadeInTextExtended 2s 4.2s forwards;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .signature-zone .line {
+      height: 1px;
+      width: 60px;
+      margin: 0 15px;
+      background: linear-gradient(90deg, transparent, #00ff99, transparent);
+      animation: linePulse 3.5s infinite ease-in-out;
+    }
+
+    @keyframes linePulse {
+
+      0%,
+      100% {
+        opacity: 0.4;
+        transform: scaleX(0.85);
+      }
+
+      50% {
+        opacity: 0.9;
+        transform: scaleX(1.15);
+      }
+    }
+
+    .signature-zone strong {
+      color: #00ff99;
+      font-weight: normal;
+      animation: signatureColorShift 9s infinite;
+    }
+
+    @keyframes signatureColorShift {
+
+      0%,
+      100% {
+        color: #00ff99;
+      }
+
+      25% {
+        color: #0099ff;
+      }
+
+      50% {
+        color: #fff;
+      }
+
+      75% {
+        color: #00ff99;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="flag-background"></div>
+  <div class="overlay-grid"></div>
+  <div class="overlay-scanlines"></div>
+
+  <div class="breach-container">
+    <!-- Your image here -->
+    <img src="145604505.png" alt="QuickSilver" class="hacker-image">
+
+    <!-- Dramatic animated title -->
+    <h1 class="main-title">
+      <span class="char">Q</span><span class="char">u</span><span class="char">i</span><span class="char">c</span><span
+        class="char">k</span><span class="char">S</span><span class="char">i</span><span class="char">l</span><span
+        class="char">v</span><span class="char">e</span><span class="char">r</span>
+      <span class="sub-title-part">System Breached</span>
+    </h1>
+
+    <p class="sub-message">
+      The system integrity has been <span class="highlight">compromised</span>. All data is now under my control.<br>
+      By the time you see this, your entire infrastructure belongs to <span class="highlight">QuickSilver</span>.<br>
+      You can keep searching for evidence, but you’re already too late.<br>
+      Welcome to your new reality, admin.
+    </p>
+
+    <div class="signature-zone">
+      <span class="line"></span>
+      <strong>QuickSilver</strong>
+      <span class="line"></span>
+    </div>
+  </div>
+</body>
+
+</html>
