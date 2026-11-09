@@ -4,42 +4,74 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>System Protected By QuickSilver</title>
+  <title>Security — Fixare Studio</title>
+  <meta name="description" content="Security surface of Fixare Studio. Scope, disclosure, PGP key, security.txt.">
+  <meta name="theme-color" content="#050a13">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://security.fixarestudio.com/">
+  <meta name="color-scheme" content="dark">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Security — Fixare Studio">
+  <meta property="og:description" content="Security surface of Fixare Studio. Scope, disclosure, PGP key, security.txt.">
+  <meta property="og:url" content="https://security.fixarestudio.com/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Security — Fixare Studio">
+  <meta name="twitter:description" content="Security surface of Fixare Studio. Scope, disclosure, PGP key, security.txt.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aldrich&family=Roboto+Mono:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Aldrich&display=swap');
-    @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300&display=swap');
-
     :root {
-      --bg-color: #050a13;
-      --flag-opacity: 0.18;
+      --bg: #050a13;
+      --fg: #e6eeeb;
+      --dim: #7d938e;
+      --faint: #6f8580;
+      --acc: #00ff99;
+      --line: rgba(0, 255, 153, 0.16);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      overflow-x: hidden;
+      overflow-x: clip;
     }
 
     body {
-      background-color: var(--bg-color);
-      color: #e0e0e0;
-      font-family: 'Roboto Mono', monospace;
       margin: 0;
-      padding: 0;
       min-height: 100vh;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      animation: subtleBodyShift 18s infinite ease-in-out;
+      overflow-x: hidden;
+      overflow-x: clip;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Roboto Mono', monospace;
+      font-weight: 300;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
     }
 
-    #flag-background {
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--acc);
+      outline-offset: 3px;
+    }
+
+    /* background */
+
+    #flag {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: url('https://upload.wikimedia.org/wikipedia/commons/3/32/Flag_of_Pakistan.svg');
-      background-size: cover;
-      background-position: center;
-      opacity: var(--flag-opacity);
+      inset: 0;
       z-index: -10;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/3/32/Flag_of_Pakistan.svg') center / cover no-repeat;
+      opacity: 0.18;
       animation: flagPulsate 18s infinite alternate, flagGlitch 25s infinite steps(1);
     }
 
@@ -84,390 +116,442 @@
       }
     }
 
-    .overlay-grid,
-    .overlay-scanlines {
+    .grid,
+    .scan {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
+      inset: 0;
       z-index: -8;
+      pointer-events: none;
     }
 
-    .overlay-grid {
-      background-image: linear-gradient(rgba(0, 255, 128, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 128, 0.03) 1px, transparent 1px);
-      background-size: 35px 35px;
-      animation: gridMove 25s linear infinite;
+    .grid {
+      background-image:
+        linear-gradient(rgba(0, 255, 128, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 128, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      animation: gridMove 30s linear infinite;
     }
 
     @keyframes gridMove {
       to {
-        background-position: 70px 70px;
+        background-position: 80px 80px;
       }
     }
 
-    .overlay-scanlines {
-      background: linear-gradient(to bottom, rgba(25, 30, 60, 0) 0%, rgba(25, 255, 60, 0.04) 50%, rgba(25, 30, 60, 0) 100%);
+    .scan {
+      background: linear-gradient(to bottom, transparent, rgba(25, 255, 60, 0.035), transparent);
       background-size: 100% 4px;
-      animation: scanlineMove 0.25s linear infinite;
+      animation: scanMove 0.3s linear infinite;
     }
 
-    @keyframes scanlineMove {
+    @keyframes scanMove {
       to {
         background-position: 0 4px;
       }
     }
 
-    @keyframes subtleBodyShift {
+    /* layout */
 
-      0%,
-      100% {
-        transform: translate(0, 0) skew(0deg, 0deg);
-      }
-
-      25% {
-        transform: translate(0.5px, -0.5px) skew(0.005deg, -0.005deg);
-      }
-
-      50% {
-        transform: translate(-0.5px, 0.5px) skew(-0.005deg, 0.005deg);
-      }
-
-      75% {
-        transform: translate(-0.5px, -0.5px) skew(0.005deg, 0.005deg);
-      }
-    }
-
-    .breach-container {
+    .wrap {
       position: relative;
-      text-align: center;
-      padding: 20px;
       z-index: 1;
-      max-width: 95%;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
     }
 
-    .hacker-image {
-      width: 180px;
-      height: 180px;
-      border-radius: 12px;
-      box-shadow: 0 0 40px #00ff99a0, 0 0 8px #fff;
-      margin: 0 auto 30px auto;
-      display: block;
-      object-fit: cover;
-      border: 2px solid #00ff99;
-      animation: hackerImgPulse 3s infinite alternate;
-    }
-
-    @keyframes hackerImgPulse {
-      0% {
-        box-shadow: 0 0 20px #00ff99a0, 0 0 8px #fff;
-      }
-
-      100% {
-        box-shadow: 0 0 60px #00ff99e0, 0 0 16px #fff;
-      }
-    }
-
-    .main-title {
-      font-family: 'Aldrich', sans-serif;
-      font-size: clamp(2.2rem, 10vw, 6rem);
-      color: #fff;
-      text-transform: uppercase;
-      letter-spacing: 0.10em;
-      position: relative;
-      margin-bottom: 35px;
-      display: block;
-    }
-
-    .main-title .char {
-      display: inline-block;
-      opacity: 0;
-      transform: translateY(40px) scale(0.6);
-      animation: charAppear 0.45s forwards, charRgbShift 4.5s infinite alternate;
-    }
-
-    .main-title .char:nth-child(1) {
-      animation-delay: 0.50s, 0.60s;
-    }
-
-    .main-title .char:nth-child(2) {
-      animation-delay: 0.58s, 0.68s;
-    }
-
-    .main-title .char:nth-child(3) {
-      animation-delay: 0.66s, 0.76s;
-    }
-
-    .main-title .char:nth-child(4) {
-      animation-delay: 0.74s, 0.84s;
-    }
-
-    .main-title .char:nth-child(5) {
-      animation-delay: 0.82s, 0.92s;
-    }
-
-    .main-title .char:nth-child(6) {
-      animation-delay: 0.90s, 1.00s;
-    }
-
-    .main-title .char:nth-child(7) {
-      animation-delay: 0.98s, 1.08s;
-    }
-
-    .main-title .char:nth-child(8) {
-      animation-delay: 1.06s, 1.16s;
-    }
-
-    .main-title .char:nth-child(9) {
-      animation-delay: 1.14s, 1.24s;
-    }
-
-    .main-title .char:nth-child(10) {
-      animation-delay: 1.22s, 1.32s;
-    }
-
-    .main-title .char:nth-child(11) {
-      animation-delay: 1.30s, 1.40s;
-    }
-
-    .main-title .char:nth-child(12) {
-      animation-delay: 1.38s, 1.48s;
-    }
-
-    @keyframes charAppear {
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
-
-    @keyframes charRgbShift {
-
-      0%,
-      100% {
-        text-shadow: 0 0 8px #00ff99, 0 0 18px #00ff99, 0 0 30px #00ff9990;
-        color: #00ff99;
-      }
-
-      33% {
-        text-shadow: 0 0 8px #fff, 0 0 18px #fff, 0 0 30px #fff;
-        color: #fff;
-      }
-
-      66% {
-        text-shadow: 0 0 8px #0099ff, 0 0 18px #0099ff, 0 0 30px #0099ff90;
-        color: #00ccff;
-      }
-    }
-
-    .main-title .sub-title-part {
-      font-size: 0.5em;
-      font-weight: normal;
-      color: #dde;
-      opacity: 0;
-      display: inline-block;
-      vertical-align: middle;
-      margin-left: 0.5em;
-      animation: fadeInTextSimple 1s 2.2s forwards, subTitleGlow 3.5s 2.2s infinite alternate;
-    }
-
-    @keyframes fadeInTextSimple {
-      to {
-        opacity: 0.9;
-      }
-    }
-
-    @keyframes subTitleGlow {
-
-      0%,
-      100% {
-        text-shadow: 0 0 7px #00ff99, 0 0 14px #fff;
-      }
-
-      50% {
-        text-shadow: 0 0 9px #0099ff, 0 0 18px #fff;
-      }
-    }
-
-    .sub-message {
-      font-size: clamp(0.95rem, 2.3vw, 1.25rem);
-      line-height: 1.8;
-      max-width: 700px;
-      margin: 0 auto 35px auto;
-      color: #b0ffd0;
-      opacity: 0;
-      animation: fadeInTextExtended 2s 2.5s forwards;
-    }
-
-    @keyframes fadeInTextExtended {
-      from {
-        opacity: 0;
-        transform: translateY(15px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0px);
-      }
-    }
-
-    .sub-message span.highlight {
-      color: transparent;
-      animation: rgbTextReveal 3.5s infinite alternate, rgbTextGlow 3.5s infinite alternate;
-      padding: 0 2px;
-      font-weight: bold;
-    }
-
-    @keyframes rgbTextReveal {
-      0% {
-        background: linear-gradient(90deg, #00ff99, #fff, #0099ff, #00ff99);
-        -webkit-background-clip: text;
-        background-clip: text;
-        background-size: 300% 100%;
-        background-position: 0% 50%;
-      }
-
-      50% {
-        background-position: 100% 50%;
-      }
-
-      100% {
-        background-position: 0% 50%;
-      }
-    }
-
-    @keyframes rgbTextGlow {
-      0% {
-        text-shadow: 0 0 4px #00ff99a0, 0 0 7px #fff;
-      }
-
-      50% {
-        text-shadow: 0 0 4px #0099ffa0, 0 0 7px #fff;
-      }
-
-      100% {
-        text-shadow: 0 0 4px #fff, 0 0 7px #00ff99a0;
-      }
-    }
-
-    .signature-zone {
-      font-family: 'Aldrich', sans-serif;
-      font-size: clamp(0.85rem, 2vw, 1.05rem);
-      color: #77ffbb;
-      letter-spacing: 1.5px;
-      margin-top: 45px;
-      opacity: 0;
-      animation: fadeInTextExtended 2s 4.2s forwards;
-      display: inline-flex;
+    .top {
+      display: flex;
+      justify-content: space-between;
       align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--line);
+      font-size: 0.66rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
     }
 
-    .signature-zone .line {
+    .top .host {
+      color: var(--acc);
+    }
+
+    .dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--acc);
+      box-shadow: 0 0 8px var(--acc);
+      margin-right: 8px;
+      vertical-align: 1px;
+      animation: blink 2.4s infinite steps(1);
+    }
+
+    @keyframes blink {
+      50% {
+        opacity: 0.2;
+      }
+    }
+
+    /* header */
+
+    header {
+      padding: 72px 0 0;
+    }
+
+    h1 {
+      margin: 0 0 16px;
+      font-family: 'Aldrich', sans-serif;
+      font-size: clamp(2.3rem, 10vw, 4.6rem);
+      line-height: 1;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #fff;
+      overflow-wrap: anywhere;
+      max-width: 100%;
+    }
+
+    h1 span {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(26px);
+      animation: rise 0.5s forwards, glow 6s 1s infinite alternate;
+    }
+
+    h1 span:last-child {
+      margin-right: -0.1em;
+    }
+
+    h1 span:nth-child(1) {
+      animation-delay: 0.10s, 1s;
+    }
+
+    h1 span:nth-child(2) {
+      animation-delay: 0.17s, 1s;
+    }
+
+    h1 span:nth-child(3) {
+      animation-delay: 0.24s, 1s;
+    }
+
+    h1 span:nth-child(4) {
+      animation-delay: 0.31s, 1s;
+    }
+
+    h1 span:nth-child(5) {
+      animation-delay: 0.38s, 1s;
+    }
+
+    h1 span:nth-child(6) {
+      animation-delay: 0.45s, 1s;
+    }
+
+    h1 span:nth-child(7) {
+      animation-delay: 0.52s, 1s;
+    }
+
+    h1 span:nth-child(8) {
+      animation-delay: 0.59s, 1s;
+    }
+
+    @keyframes rise {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes glow {
+
+      0%,
+      100% {
+        text-shadow: 0 0 14px rgba(0, 255, 153, 0.35);
+      }
+
+      50% {
+        text-shadow: 0 0 22px rgba(0, 153, 255, 0.4);
+      }
+    }
+
+    .org {
+      margin: 0 0 26px;
+      font-size: 0.66rem;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--dim);
+      opacity: 0;
+      animation: fade 1s 0.7s forwards;
+    }
+
+    @keyframes fade {
+      to {
+        opacity: 1;
+      }
+    }
+
+    .lede {
+      margin: 0;
+      max-width: 44ch;
+      font-size: 0.88rem;
+      line-height: 1.75;
+      color: #b9cbc6;
+      opacity: 0;
+      animation: fade 1.2s 1s forwards;
+    }
+
+    /* sections */
+
+    section {
+      margin-top: 56px;
+    }
+
+    .label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      font-size: 0.68rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--acc);
+    }
+
+    .label::after {
+      content: "";
+      flex: 1;
       height: 1px;
-      width: 60px;
-      margin: 0 15px;
-      background: linear-gradient(90deg, transparent, #00ff99, transparent);
-      animation: linePulse 3.5s infinite ease-in-out;
+      background: var(--line);
     }
 
-    @keyframes linePulse {
+    .stamp {
+      border: 1px solid var(--acc);
+      padding: 3px 8px;
+      letter-spacing: 0.2em;
+      transform: rotate(-1.5deg);
+      color: var(--acc);
+      white-space: nowrap;
+    }
 
-      0%,
-      100% {
-        opacity: 0.4;
-        transform: scaleX(0.85);
-      }
+    .notice {
+      border-left: 2px solid var(--acc);
+      padding-left: 20px;
+      font-size: 0.84rem;
+      line-height: 1.9;
+      color: #a9bdb8;
+    }
 
-      50% {
-        opacity: 0.9;
-        transform: scaleX(1.15);
+    .notice p {
+      margin: 0 0 14px;
+    }
+
+    .notice p:last-child {
+      margin-bottom: 0;
+    }
+
+    .notice strong {
+      color: #fff;
+      font-weight: 500;
+    }
+
+    /* rows */
+
+    .rows {
+      display: flex;
+      flex-direction: column;
+      border-top: 1px solid var(--line);
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: baseline;
+      gap: 8px 20px;
+      padding: 17px 4px 17px 0;
+      border-bottom: 1px solid var(--line);
+      transition: background 0.18s, padding-left 0.18s;
+    }
+
+    .row:focus-visible {
+      background: rgba(0, 255, 153, 0.045);
+    }
+
+    @media (hover: hover) {
+      .row:hover {
+        background: rgba(0, 255, 153, 0.045);
+        padding-left: 12px;
       }
     }
 
-    .signature-zone strong {
-      color: #00ff99;
-      font-weight: normal;
-      animation: signatureColorShift 9s infinite;
+    .row .k {
+      font-family: 'Aldrich', sans-serif;
+      font-size: 0.92rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #fff;
     }
 
-    @keyframes signatureColorShift {
+    .row .v {
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+      color: var(--faint);
+      white-space: nowrap;
+      transition: color 0.18s;
+    }
 
-      0%,
-      100% {
-        color: #00ff99;
+    .row:hover .v,
+    .row:focus-visible .v {
+      color: var(--acc);
+    }
+
+    .row .v::after {
+      content: " →";
+    }
+
+    /* footer */
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px 24px;
+      margin-top: 72px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+      font-size: 0.64rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+
+    footer nav {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    footer a:hover {
+      color: var(--acc);
+    }
+
+    @media (max-width: 560px) {
+      .wrap {
+        padding: 28px 20px 56px;
       }
 
-      25% {
-        color: #0099ff;
+      header {
+        padding-top: 52px;
       }
 
-      50% {
-        color: #fff;
+      section {
+        margin-top: 44px;
       }
 
-      75% {
-        color: #00ff99;
+      .row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+
+      .row .v {
+        white-space: normal;
+        overflow-wrap: anywhere;
+      }
+
+      footer {
+        margin-top: 52px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+      }
+
+      h1 span,
+      .org,
+      .lede {
+        opacity: 1;
+        transform: none;
       }
     }
   </style>
 </head>
 
 <body>
-  <div id="flag-background"></div>
-  <div class="overlay-grid"></div>
-  <div class="overlay-scanlines"></div>
+  <div id="flag"></div>
+  <div class="grid"></div>
+  <div class="scan"></div>
 
-  <div class="breach-container">
-    <!-- Your image here -->
-    <img src="145604505.png" alt="QuickSilver" class="hacker-image">
+  <div class="wrap">
 
-    <!-- Dramatic animated title -->
-    <h1 class="main-title">
-      <span class="char">Q</span><span class="char">u</span><span class="char">i</span><span class="char">c</span><span
-        class="char">k</span><span class="char">S</span><span class="char">i</span><span class="char">l</span><span
-        class="char">v</span><span class="char">e</span><span class="char">r</span>
-      <span class="sub-title-part">Protected System</span>
-    </h1>
+    <div class="top">
+      <span class="host">security.fixarestudio.com</span>
+      <span><span class="dot"></span>Operational</span>
+    </div>
 
-    <div class="legal-notice">
-    <div class="notice-header">
-      <span class="notice-seal">OFFICIAL NOTICE</span>
-      <h2 class="notice-title">Notice of Protected Infrastructure</h2>
-      <p class="notice-ref">Reference: System Integrity &amp; Security Protocol</p>
-    </div>
-  
-    <div class="notice-body">
-      <p>
-        <strong>TAKE NOTICE</strong> that the integrity of this system and all associated
-        infrastructure is <span class="highlight">protected</span> under the authority of
-        <strong>Mr QuickSilver</strong>, Security Director and Head of Offensive OPSec.
-      </p>
-  
-      <p>
-        All persons are hereby advised that this infrastructure is <strong>not a playground</strong>.
-        Unauthorized access, interference, or tampering is strictly prohibited. This environment
-        operates under controlled conditions comparable to a <em>Squid Game</em> challenge —
-        participation carries consequences.
-      </p>
-  
-      <p class="notice-warning">
-        <strong>Any attempt to touch, alter, or probe this infrastructure will be treated as a
-        violation of protocol.</strong>
-      </p>
-    </div>
-  
-    <div class="notice-footer">
-      <p>Welcome to your new reality.</p>
-      <p class="notice-signature">— Issued by authority of Mr QuickSilver, Security Director &amp; Offensive OPSec</p>
-    </div>
-  </div>
+    <header>
+      <h1 aria-label="Security">
+        <span aria-hidden="true">S</span><span aria-hidden="true">e</span><span aria-hidden="true">c</span><span aria-hidden="true">u</span><span aria-hidden="true">r</span><span aria-hidden="true">i</span><span aria-hidden="true">t</span><span aria-hidden="true">y</span>
+      </h1>
+      <p class="org">Fixare Studio · Offense &amp; Defense</p>
+      <p class="lede">Protected infrastructure. Authorized testing welcome — within scope.</p>
+    </header>
 
-    <div class="signature-zone">
-      <span class="line"></span>
-      <strong>QuickSilver</strong>
-      <span class="line"></span>
-    </div>
+    <main>
+      <section>
+        <p class="label"><span class="stamp">Notice</span></p>
+        <div class="notice">
+          <p><strong>All access is logged.</strong> Unauthorized access, interference and tampering are recorded.</p>
+          <p>Testing is permitted under published policy. Report what you find or it counts as noise.</p>
+        </div>
+      </section>
+
+      <section>
+        <p class="label">Resources</p>
+        <div class="rows">
+          <a class="row" href="https://fixarestudio.com/security/policy">
+            <span class="k">Rules of engagement</span>
+            <span class="v">/security/policy</span>
+          </a>
+          <a class="row" href="https://fixarestudio.com/security/contact">
+            <span class="k">Report a vulnerability</span>
+            <span class="v">/security/contact</span>
+          </a>
+          <a class="row" href="https://fixarestudio.com/security/thanks">
+            <span class="k">Credits</span>
+            <span class="v">/security/thanks</span>
+          </a>
+          <a class="row" href="https://fixarestudio.com/.well-known/pgp.txt">
+            <span class="k">PGP key</span>
+            <span class="v">/.well-known/pgp.txt</span>
+          </a>
+          <a class="row" href="https://fixarestudio.com/.well-known/security.txt">
+            <span class="k">security.txt</span>
+            <span class="v">/.well-known/security.txt</span>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>© 2026 Fixare Studio</span>
+      <nav aria-label="Security">
+        <a href="https://fixarestudio.com/security/policy">Policy</a>
+        <a href="https://fixarestudio.com/security/contact">Contact</a>
+        <a href="https://fixarestudio.com/security/thanks">Credits</a>
+        <a href="https://fixarestudio.com/.well-known/pgp.txt">PGP</a>
+        <a href="https://fixarestudio.com/.well-known/security.txt">security.txt</a>
+        <a href="https://fixarestudio.com">fixarestudio.com</a>
+      </nav>
+    </footer>
+
   </div>
 </body>
 
