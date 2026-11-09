@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security — Fixare Studio</title>
+  <meta name="description" content="Security surface of Fixare Studio. Scope, disclosure, PGP key, security.txt.">
+  <meta name="theme-color" content="#050a13">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://security.fixarestudio.com/">
+  <meta name="color-scheme" content="dark">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Security — Fixare Studio">
+  <meta property="og:description" content="Security surface of Fixare Studio. Scope, disclosure, PGP key, security.txt.">
+  <meta property="og:url" content="https://security.fixarestudio.com/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Security — Fixare Studio">
+  <meta name="twitter:description" content="Security surface of Fixare Studio. Scope, disclosure, PGP key, security.txt.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aldrich&family=Roboto+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #050a13;
+      --fg: #e6eeeb;
+      --dim: #7d938e;
+      --faint: #6f8580;
+      --acc: #00ff99;
+      --line: rgba(0, 255, 153, 0.16);
+    }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+    html {
+      overflow-x: hidden;
+      overflow-x: clip;
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      overflow-x: clip;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Roboto Mono', monospace;
+      font-weight: 300;
+      font-size: 16px; /* Slightly increased base size for readability */
+      -webkit-font-smoothing: antialiased;
+    }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+    :focus-visible {
+      outline: 2px solid var(--acc);
+      outline-offset: 3px;
+    }
+    /* background */
+    #flag {
+      position: fixed;
+      inset: 0;
+      z-index: -10;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/3/32/Flag_of_Pakistan.svg') center / cover no-repeat;
+      opacity: 0.18;
+      animation: flagPulsate 18s infinite alternate, flagGlitch 25s infinite steps(1);
+    }
+    @keyframes flagPulsate {
+      0% {
+        opacity: 0.10;
+        filter: saturate(0.5) blur(0.5px) brightness(0.8);
+      }
+      50% {
+        opacity: 0.25;
+        filter: saturate(1.1) blur(0px) brightness(1.2);
+      }
+      100% {
+        opacity: 0.10;
+        filter: saturate(0.5) blur(0.5px) brightness(0.8);
+      }
+    }
+    @keyframes flagGlitch {
+      0%,
+      100% {
+        clip-path: inset(0 0 0 0);
+      }
+      3% {
+        clip-path: polygon(0 0, 100% 0, 100% 25%, 0 30%, 0 55%, 100% 50%, 100% 100%, 0 100%);
+      }
+      3.1% {
+        clip-path: inset(0 0 0 0);
+      }
+      7% {
+        transform: translateX(1px) translateY(-0.5px);
+      }
+      7.1% {
+        transform: none;
+      }
+    }
+    .grid,
+    .scan {
+      position: fixed;
+      inset: 0;
+      z-index: -8;
+      pointer-events: none;
+    }
+    .grid {
+      background-image:
+        linear-gradient(rgba(0, 255, 128, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 128, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      animation: gridMove 30s linear infinite;
+    }
+    @keyframes gridMove {
+      to {
+        background-position: 80px 80px;
+      }
+    }
+    .scan {
+      background: linear-gradient(to bottom, transparent, rgba(25, 255, 60, 0.035), transparent);
+      background-size: 100% 4px;
+      animation: scanMove 0.3s linear infinite;
+    }
+    @keyframes scanMove {
+      to {
+        background-position: 0 4px;
+      }
+    }
+    /* layout - expanded width for desktop */
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 50px 32px 90px;
+    }
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--line);
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+    .top .host {
+      color: var(--acc);
+    }
+    .dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--acc);
+      box-shadow: 0 0 8px var(--acc);
+      margin-right: 8px;
+      vertical-align: 1px;
+      animation: blink 2.4s infinite steps(1);
+    }
+    @keyframes blink {
+      50% {
+        opacity: 0.2;
+      }
+    }
+    /* header */
+    header {
+      padding: 72px 0 0;
+    }
+    h1 {
+      margin: 0 0 16px;
+      font-family: 'Aldrich', sans-serif;
+      font-size: clamp(2.8rem, 8vw, 5.2rem);
+      line-height: 1;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #fff;
+      overflow-wrap: anywhere;
+      max-width: 100%;
+    }
+    h1 span {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(26px);
+      animation: rise 0.5s forwards, glow 6s 1s infinite alternate;
+    }
+    h1 span:last-child {
+      margin-right: -0.1em;
+    }
+    h1 span:nth-child(1) { animation-delay: 0.10s, 1s; }
+    h1 span:nth-child(2) { animation-delay: 0.17s, 1s; }
+    h1 span:nth-child(3) { animation-delay: 0.24s, 1s; }
+    h1 span:nth-child(4) { animation-delay: 0.31s, 1s; }
+    h1 span:nth-child(5) { animation-delay: 0.38s, 1s; }
+    h1 span:nth-child(6) { animation-delay: 0.45s, 1s; }
+    h1 span:nth-child(7) { animation-delay: 0.52s, 1s; }
+    h1 span:nth-child(8) { animation-delay: 0.59s, 1s; }
+
+    @keyframes rise {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    @keyframes glow {
+      0%,
+      100% {
+        text-shadow: 0 0 14px rgba(0, 255, 153, 0.35);
+      }
+      50% {
+        text-shadow: 0 0 22px rgba(0, 153, 255, 0.4);
+      }
+    }
+    .org {
+      margin: 0 0 20px;
+      font-size: 0.75rem;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--dim);
+      opacity: 0;
+      animation: fade 1s 0.7s forwards;
+    }
+    @keyframes fade {
+      to {
+        opacity: 1;
+      }
+    }
+    .lede {
+      margin: 0;
+      max-width: 60ch;
+      font-size: 1rem;
+      line-height: 1.75;
+      color: #b9cbc6;
+      opacity: 0;
+      animation: fade 1.2s 1s forwards;
+    }
+    /* sections */
+    section {
+      margin-top: 64px;
+    }
+    .label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--acc);
+    }
+    .label::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+    }
+    .stamp {
+      border: 1px solid var(--acc);
+      padding: 4px 10px;
+      letter-spacing: 0.2em;
+      transform: rotate(-1.5deg);
+      color: var(--acc);
+      white-space: nowrap;
+    }
+    .notice {
+      border-left: 2px solid var(--acc);
+      padding-left: 20px;
+      font-size: 0.95rem;
+      line-height: 1.9;
+      color: #a9bdb8;
+    }
+    .notice p {
+      margin: 0 0 14px;
+    }
+    .notice p:last-child {
+      margin-bottom: 0;
+    }
+    .notice strong {
+      color: #fff;
+      font-weight: 500;
+    }
+    /* rows */
+    .rows {
+      display: flex;
+      flex-direction: column;
+      border-top: 1px solid var(--line);
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: baseline;
+      gap: 8px 20px;
+      padding: 20px 8px 20px 0;
+      border-bottom: 1px solid var(--line);
+      transition: background 0.18s, padding-left 0.18s;
+    }
+    .row:focus-visible {
+      background: rgba(0, 255, 153, 0.045);
+    }
+    @media (hover: hover) {
+      .row:hover {
+        background: rgba(0, 255, 153, 0.045);
+        padding-left: 12px;
+      }
+    }
+    .row .k {
+      font-family: 'Aldrich', sans-serif;
+      font-size: 1.05rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #fff;
+    }
+    .row .v {
+      font-size: 0.85rem;
+      letter-spacing: 0.04em;
+      color: var(--faint);
+      white-space: nowrap;
+      transition: color 0.18s;
+    }
+    .row:hover .v,
+    .row:focus-visible .v {
+      color: var(--acc);
+    }
+    .row .v::after {
+      content: " →";
+    }
+    /* footer */
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px 24px;
+      margin-top: 80px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line);
+      font-size: 0.75rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+    footer nav {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    footer a:hover {
+      color: var(--acc);
+    }
+    @media (max-width: 560px) {
+      .wrap {
+        padding: 28px 20px 56px;
+      }
+      header {
+        padding-top: 52px;
+      }
+      section {
+        margin-top: 44px;
+      }
+      .row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+      .row .v {
+        white-space: normal;
+        overflow-wrap: anywhere;
+      }
+      footer {
+        margin-top: 52px;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+      }
+      h1 span,
+      .org,
+      .lede {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="flag"></div>
+  <div class="grid"></div>
+  <div class="scan"></div>
+  <div class="wrap">
+    <div class="top">
+      <span class="host">security.fixarestudio.com</span>
+      <span><span class="dot"></span>Operational</span>
+    </div>
+    <header>
+      <h1 aria-label="Security">
+        <span aria-hidden="true">S</span><span aria-hidden="true">e</span><span aria-hidden="true">c</span><span aria-hidden="true">u</span><span aria-hidden="true">r</span><span aria-hidden="true">i</span><span aria-hidden="true">t</span><span aria-hidden="true">y</span>
+      </h1>
+      <p class="org">Fixare Studio · Offense &amp; Defense</p>
+      <p class="lede">Protected infrastructure. Authorized testing welcome — within scope.</p>
+    </header>
+    <main>
+      <section>
+        <p class="label"><span class="stamp">Notice</span></p>
+        <div class="notice">
+          <p><strong>All access is logged.</strong> Unauthorized access, interference and tampering are recorded.</p>
+          <p>Testing is permitted under published policy. Report what you find or it counts as noise.</p>
+        </div>
+      </section>
+      <section>
+        <p class="label">Resources</p>
+        <div class="rows">
+          <a class="row" href="https://fixarestudio.com/security/policy">
+            <span class="k">Rules of engagement</span>
+            <span class="v">/security/policy</span>
+          </a>
+          <a class="row" href="https://fixarestudio.com/security/contact">
+            <span class="k">Report a vulnerability</span>
+            <span class="v">/security/contact</span>
+          </a>
+          <a class="row" href="https://fixarestudio.com/security/thanks">
+            <span class="k">Credits</span>
+            <span class="v">/security/thanks</span>
+          </a>
+          <a class="row" href="https://fixarestudio.com/.well-known/pgp.txt">
+            <span class="k">PGP key</span>
+            <span class="v">/.well-known/pgp.txt</span>
+          </a>
+          <a class="row" href="https://fixarestudio.com/.well-known/security.txt">
+            <span class="k">security.txt</span>
+            <span class="v">/.well-known/security.txt</span>
+          </a>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <span>© 2026 Fixare Studio</span>
+      <nav aria-label="Security">
+        <a href="https://fixarestudio.com/security/policy">Policy</a>
+        <a href="https://fixarestudio.com/security/contact">Contact</a>
+        <a href="https://fixarestudio.com/security/thanks">Credits</a>
+        <a href="https://fixarestudio.com/.well-known/pgp.txt">PGP</a>
+        <a href="https://fixarestudio.com/.well-known/security.txt">security.txt</a>
+        <a href="https://fixarestudio.com">fixarestudio.com</a>
+      </nav>
+    </footer>
+  </div>
+</body>
+</html>
